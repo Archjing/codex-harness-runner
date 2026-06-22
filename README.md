@@ -1,6 +1,15 @@
-# Codex Harness Runner with Codex CLI MCP
+# Codex Harness Runner with Codex CLI MCP Server
 
-This project configures Codex CLI as a long-running MCP server for an OpenAI Agents SDK harness team.
+This project runs Codex CLI as a stdio MCP server process for an OpenAI Agents SDK harness team.
+
+Chinese documentation: [README.zh-CN.md](/home/zj/workspace/codex-harness-runner/README.zh-CN.md)
+
+Terminology used here:
+
+- `MCP` means Model Context Protocol.
+- `Codex CLI MCP server` means the local process started with `codex mcp-server`.
+- The MCP server exposes tools named `codex` and `codex-reply`; those are the tools the Agents SDK agents call.
+- `Codex MCP` may appear as shorthand in older notes, but the precise meaning is `Codex CLI MCP server`.
 
 ## What it does
 
@@ -9,8 +18,27 @@ This project configures Codex CLI as a long-running MCP server for an OpenAI Age
 - Exposes the `codex` and `codex-reply` tools to repository-capable agents
 - Builds a profile-driven Harness Team Lead with Context Curator, Planner, Codex Implementer, Reviewer, Verifier, and Memory Steward specialists
 - Supports `--profile`, `--mode`, and optional local JSON run summaries
-- Uses long MCP timeouts suitable for real Codex work
+- Uses long MCP client session timeouts suitable for real Codex work
 - Keeps OpenAI API orchestration config in `.env`
+
+## Requirements
+
+Local runner requirements:
+
+- Python 3.12 or newer.
+- OpenAI Agents SDK and Python dependencies from `requirements.txt`.
+- Codex CLI available on `PATH`; verify with `codex --version`.
+- A working Codex CLI login/config under the same user that runs the runner.
+- `.env` with `OPENAI_API_KEY` and, for compatible gateways, `OPENAI_BASE_URL` including `/v1`.
+- At least one local `profiles/*.toml` file copied from `profiles/example.toml`.
+- Target project paths must stay under `/home/zj/workspace`; this is currently enforced by profile loading.
+
+Containerization status:
+
+- No Docker image is provided for now.
+- Do not pursue a Docker image unless the final image can stay under 500 MB.
+- A first Docker attempt was intentionally stopped because Debian `nodejs` / `npm` packages alone were projected to add about 370 MB before Python dependencies and Codex CLI, making a sub-500 MB image unlikely.
+- Prefer local execution for now; revisit containers later only with a lighter base, a prebuilt Codex binary strategy, or a narrower runtime target.
 
 ## Setup
 
@@ -35,7 +63,7 @@ If you need a custom API gateway or compatible endpoint, also set:
 OPENAI_BASE_URL=https://your-base-url/v1
 ```
 
-Optional Codex MCP defaults:
+Optional defaults passed to Codex tool calls through the MCP server:
 
 ```bash
 CODEX_MCP_MODEL=gpt-5.4
@@ -44,11 +72,11 @@ CODEX_MCP_APPROVAL_POLICY=never
 CODEX_MCP_TIMEOUT_SECONDS=360000
 ```
 
-Project/workspace defaults now live in `profiles/*.toml`.
+Project/workspace defaults live in local `profiles/*.toml` files. These files are ignored by Git because they can contain local paths and provider choices. Start from `profiles/example.toml`.
 
 ## Smoke test
 
-This verifies that Codex CLI starts as an MCP server and exposes tools. It does not run a full model workflow.
+This verifies that Codex CLI starts as a stdio MCP server process and exposes the expected tools. It does not run a full model workflow.
 
 ```bash
 cd /home/zj/workspace/codex-harness-runner
@@ -65,7 +93,13 @@ tools=codex,codex-reply
 
 ## Profiles
 
-Available initial profiles:
+Create local profiles by copying the example:
+
+```bash
+cp profiles/example.toml profiles/workspace.toml
+```
+
+Common local profile names:
 
 - `workspace`: `/home/zj/workspace`
 - `brainstorm`: `/home/zj/workspace/brainstorm`
@@ -132,7 +166,7 @@ python3 smoke_test.py
 python3 main.py --profile workspace --mode plan --save-run-log \
   "只读总结当前 profile 的规则文件和验证命令，不要改文件。"
 python3 main.py --profile workspace --mode review --save-run-log \
-  "只读检查 codex-harness-runner 的 smoke test 是否仍是最小 MCP 可用性验证；不要改文件。"
+  "只读检查 codex-harness-runner 的 smoke test 是否仍是最小 Codex CLI MCP server 可用性验证；不要改文件。"
 ```
 
 ## Core initialization
@@ -150,9 +184,9 @@ async with MCPServerStdio(
 ) as codex_mcp:
 ```
 
-Codex MCP exposes two tools:
+The Codex CLI MCP server exposes two tools:
 
 - `codex`: start a new Codex session. Pass `prompt`, `cwd`, `sandbox`, `approval-policy`, and optionally `model`.
 - `codex-reply`: continue an existing Codex session with `threadId` and `prompt`.
 
-Do not register this server as a global MCP server for the same Codex Desktop session unless you explicitly want recursive Codex-to-Codex behavior. For multi-agent workflows, start it from the Agents SDK runner.
+Do not register this server as a global MCP server for the same Codex Desktop session unless you explicitly want recursive Codex-to-Codex behavior. For multi-agent workflows, start the stdio MCP server from this Agents SDK runner.

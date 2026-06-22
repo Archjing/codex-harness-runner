@@ -1,4 +1,4 @@
-"""Profile-driven Codex MCP harness runner."""
+"""Profile-driven Codex CLI MCP server harness runner."""
 
 from .runner import run_team
 

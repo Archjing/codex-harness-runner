@@ -14,7 +14,7 @@ def parse_args() -> argparse.Namespace:
         nargs="?",
         default=(
             "Inspect the current profile through the Harness team and summarize the available "
-            "Codex MCP workflow."
+            "Codex CLI MCP server workflow."
         ),
     )
     parser.add_argument(

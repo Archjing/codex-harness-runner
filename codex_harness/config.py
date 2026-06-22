@@ -22,7 +22,7 @@ class _CodexEventValidationFilter(logging.Filter):
 
 
 def install_logging_filters() -> None:
-    """Codex MCP emits codex/event notifications that older MCP clients log noisily."""
+    """Codex CLI MCP server emits codex/event notifications that older MCP clients log noisily."""
     logging.getLogger().addFilter(_CodexEventValidationFilter())
 
 

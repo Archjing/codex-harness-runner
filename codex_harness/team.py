@@ -10,7 +10,7 @@ from .schemas import HarnessOutput
 
 def codex_call_policy(profile: HarnessProfile) -> str:
     return (
-        "When calling the Codex MCP `codex` tool, always include these arguments unless the "
+        "When calling the `codex` tool exposed by the Codex CLI MCP server, always include these arguments unless the "
         f"user explicitly overrides them: cwd={str(profile.cwd)!r}, model={profile.model!r}, "
         f"sandbox={profile.sandbox!r}, approval-policy={profile.approval_policy!r}. "
         "Keep changes scoped to the profile cwd, avoid destructive commands, and return the "
@@ -73,7 +73,7 @@ def build_team(codex_mcp: MCPServerStdio, profile: HarnessProfile, mode: str) ->
         model=resolve_agent_model(implementer_model),
         model_settings=resolve_model_settings(implementer_model),
         instructions=(
-            "Use the Codex MCP tools for repository inspection and implementation. "
+            "Use the tools exposed by the Codex CLI MCP server for repository inspection and implementation. "
             f"{codex_call_policy(profile)}"
         ),
         mcp_servers=[codex_mcp],
@@ -84,7 +84,7 @@ def build_team(codex_mcp: MCPServerStdio, profile: HarnessProfile, mode: str) ->
         model=resolve_agent_model(reviewer_model),
         model_settings=resolve_model_settings(reviewer_model),
         instructions=(
-            "Use Codex MCP tools to inspect repository state, diffs, risks, missing tests, and "
+            "Use the tools exposed by the Codex CLI MCP server to inspect repository state, diffs, risks, missing tests, and "
             "documentation drift. Findings first, ordered by severity. "
             f"{codex_call_policy(profile)}"
         ),
@@ -124,11 +124,11 @@ def build_team(codex_mcp: MCPServerStdio, profile: HarnessProfile, mode: str) ->
         ),
         reviewer.as_tool(
             tool_name="review_repo",
-            tool_description="Review repository state with Codex MCP.",
+            tool_description="Review repository state with the Codex CLI MCP server tools.",
         ),
         verifier.as_tool(
             tool_name="verify_repo",
-            tool_description="Run or assess profile verification commands with Codex MCP.",
+            tool_description="Run or assess profile verification commands with the Codex CLI MCP server tools.",
         ),
         memory_steward.as_tool(
             tool_name="suggest_memory_updates",
@@ -140,7 +140,7 @@ def build_team(codex_mcp: MCPServerStdio, profile: HarnessProfile, mode: str) ->
             2,
             implementer.as_tool(
                 tool_name="implement_with_codex",
-                tool_description="Use Codex MCP to make scoped repository changes.",
+                tool_description="Use Codex CLI MCP server tools to make scoped repository changes.",
             ),
         )
 
@@ -154,7 +154,7 @@ def build_team(codex_mcp: MCPServerStdio, profile: HarnessProfile, mode: str) ->
             f"Current mode: {mode}. In plan mode, do not edit files. In review mode, inspect and "
             "verify without implementing. In implement/full mode, keep changes scoped and verify. "
             "Use the rule digest below as already-read context. If deeper detail is needed, ask "
-            "the Codex MCP-backed specialists to inspect files. Final answer must include "
+            "the Codex CLI MCP server-backed specialists to inspect files. Final answer must include "
             "verification status: passed, failed, or not_run. Set verification_status to passed "
             "only when concrete command/file evidence proves the check. Set failed when a check "
             "ran and failed. Set not_run when no verification command ran or evidence is indirect. "
