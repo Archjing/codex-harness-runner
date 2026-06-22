@@ -1,0 +1,26 @@
+name = "brainstorm"
+cwd = "/home/zj/workspace/brainstorm"
+model = "gpt-5.4"
+sandbox = "workspace-write"
+approval_policy = "never"
+
+rules = [
+  "AGENTS.md",
+  "README.md",
+  "PROJECTS.md",
+  "MEMORY.md"
+]
+
+verify_doc = [
+  "rg -n \"Harness|Codex|Agents SDK\" README.md PROJECTS.md docs"
+]
+
+verify_code = [
+  "rg -n \"Harness|Codex|Agents SDK\" README.md PROJECTS.md docs"
+]
+
+memory_targets = [
+  "memory",
+  "PROJECTS.md",
+  "DECISIONS.md"
+]

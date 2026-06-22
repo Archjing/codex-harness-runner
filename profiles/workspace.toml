@@ -1,0 +1,22 @@
+name = "workspace"
+cwd = "/home/zj/workspace"
+model = "gpt-5.4"
+sandbox = "workspace-write"
+approval_policy = "never"
+
+rules = [
+  "AGENTS.md"
+]
+
+verify_doc = [
+  "rg -n \"Harness|Agents SDK|Codex MCP\" AGENTS.md brainstorm/README.md brainstorm/PROJECTS.md"
+]
+
+verify_code = [
+  "python3 /home/zj/workspace/codex-harness-runner/smoke_test.py"
+]
+
+memory_targets = [
+  "brainstorm/memory",
+  "brainstorm/PROJECTS.md"
+]
