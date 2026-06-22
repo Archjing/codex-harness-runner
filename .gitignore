@@ -6,3 +6,5 @@ __pycache__/
 .mypy_cache/
 .ruff_cache/
 runs/*.json
+profiles/*.toml
+!profiles/example.toml

@@ -1,0 +1,23 @@
+# Copy this file to profiles/<project>.toml and fill in project-specific values.
+
+name = ""
+cwd = ""
+model = ""
+sandbox = ""
+approval_policy = ""
+
+# Optional: list files the context curator should read first.
+rules = []
+
+# Optional: constrain where the runner is allowed to operate.
+allowed_paths = []
+
+# Optional: commands the verifier can run or recommend for this project.
+verification_commands = []
+
+# Optional: route individual agent roles to model providers.
+# [agent_models.planner]
+# kind = ""
+# model = ""
+# reasoning_effort = ""
+# verbosity = ""
