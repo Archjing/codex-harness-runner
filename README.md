@@ -122,27 +122,17 @@ profile 用来定义：
 - `run_harness_implement`
 - `run_harness_full`
 
-先进入本仓库目录，并确认 `uv` 在 Codex Desktop/CLI 启动环境的 `PATH` 中：
+先确认 `uv` 在 Codex Desktop/CLI 启动环境的 `PATH` 中，然后直接从 GitHub marketplace 安装 plugin：
 
 ```bash
-cd <path-to-codex-harness-runner>
 export PATH="$HOME/.local/bin:$PATH"
-```
-
-然后用 `uv` 同步依赖，不要提交或打包 `.venv`：
-
-```bash
-uv sync
-```
-
-然后把当前仓库作为 repo marketplace 加到 Codex：
-
-```bash
-codex plugin marketplace add <path-to-codex-harness-runner>
+codex plugin marketplace add Archjing/codex-harness-runner --sparse .agents/plugins
 codex plugin add codex-harness-runner@codex-harness-runner
 ```
 
 安装后需要新开 Codex thread 或重启 Codex Desktop/CLI，新的 skill 和 MCP tools 才会被加载。
+
+如果要本地运行 harness workflow，再 clone 仓库并执行 `uv sync`、配置 `.env` 和本地 profile。
 
 ## Smoke Test
 

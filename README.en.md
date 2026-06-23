@@ -158,27 +158,17 @@ This repository is also a Codex plugin. It includes:
 - `run_harness_implement`
 - `run_harness_full`
 
-First enter this repository and make sure `uv` is on `PATH` in the environment that starts Codex Desktop/CLI:
+First make sure `uv` is on `PATH` in the environment that starts Codex Desktop/CLI, then install the plugin directly from the GitHub marketplace:
 
 ```bash
-cd <path-to-codex-harness-runner>
 export PATH="$HOME/.local/bin:$PATH"
-```
-
-Then sync dependencies with `uv`. Do not commit or package `.venv`:
-
-```bash
-uv sync
-```
-
-Then add this repository as a repo marketplace:
-
-```bash
-codex plugin marketplace add <path-to-codex-harness-runner>
+codex plugin marketplace add Archjing/codex-harness-runner --sparse .agents/plugins
 codex plugin add codex-harness-runner@codex-harness-runner
 ```
 
 After installation, start a new Codex thread or restart Codex Desktop/CLI so the new skill and MCP tools are loaded.
+
+To run local harness workflows, clone the repository separately, run `uv sync`, and configure `.env` plus a local profile.
 
 ## Run the Harness team
 

@@ -4,14 +4,11 @@ This quick start explains how to ask Codex, Claude Code, or another coding agent
 
 ## 1. Install the Plugin and Skill
 
-Clone the repository and install the Codex plugin:
+Install the plugin directly from the GitHub marketplace with Codex CLI:
 
 ```bash
-git clone https://github.com/Archjing/codex-harness-runner.git
-cd codex-harness-runner
 export PATH="$HOME/.local/bin:$PATH"
-uv sync
-codex plugin marketplace add <absolute-path-to-codex-harness-runner>
+codex plugin marketplace add Archjing/codex-harness-runner --sparse .agents/plugins
 codex plugin add codex-harness-runner@codex-harness-runner
 ```
 
@@ -19,9 +16,11 @@ After installation, start a new Codex thread or restart Codex Desktop/CLI. The `
 
 ## 2. Prepare the Environment
 
-From the Codex Harness Runner repository:
+To run local harness workflows, clone the repository and prepare local config:
 
 ```bash
+git clone https://github.com/Archjing/codex-harness-runner.git
+cd codex-harness-runner
 uv sync
 cp .env.example .env
 ```

@@ -42,6 +42,29 @@ uv sync
    - `run_harness_full`
 8. Start with `run_harness_plan` unless the user explicitly asks to implement.
 
+## Local setup prompt
+
+When the user needs help configuring this plugin for a local project, offer this prompt for Codex, Claude Code, or another coding agent:
+
+```text
+Use Codex Harness Runner to configure a local harness workflow for this project.
+
+Runner repository path: <path-to-codex-harness-runner>
+Target project path: <path-to-target-project>
+Profile name: <project-name>
+
+Please do the following:
+1. Read the runner README, docs/快速上手.md or docs/Use-With-Agent-Tools.md, and profiles/example.toml.
+2. Verify `uv` is available on PATH and run `uv sync` from the runner repository.
+3. If `.env` does not exist, create it from `.env.example`; do not fill in or print secret values.
+4. Tell me exactly which environment variables I need to fill in, including `OPENAI_API_KEY`, optional `OPENAI_BASE_URL`, `CODEX_HARNESS_WORKSPACE_ROOT`, and Codex MCP defaults.
+5. Create or update `profiles/<project-name>.toml` from `profiles/example.toml`, with `cwd` set to the target project path and rule/verification entries based only on files that actually exist.
+6. Keep `.env`, real `profiles/*.toml`, run logs, credentials, API keys, tokens, and private project notes untracked and uncommitted.
+7. Run `python3 smoke_test.py` from the runner repository.
+8. Run a first plan check with `python3 main.py --profile <project-name> --mode plan --save-run-log "<task>"`.
+9. Report changed local files, commands run, verification status, and any values I still need to fill manually.
+```
+
 ## Output expectations
 
 - State the profile, mode, and verification status.
