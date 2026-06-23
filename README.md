@@ -140,6 +140,35 @@ reasoning_effort = "high"
 extra_body = { thinking = { type = "enabled" } }
 ```
 
+## Use With Agent Tools
+
+You can ask Codex, Claude Code, or another coding agent to wire this runner into a project. Give the agent the runner path, target project path, expected roles, rule files, verification commands, and the boundary that secrets must stay in `.env`.
+
+Recommended instruction:
+
+```text
+Use Codex Harness Runner to create a project-scoped harness multi-agent workflow for this repository.
+
+Runner path: /path/to/codex-harness-runner
+Target project path: /path/to/your/project
+Profile name: <project-name>
+
+Please do the following:
+1. Read the runner README and profiles/example.toml.
+2. Create or update runner profiles/<project-name>.toml for this project, keeping secrets out of the profile.
+3. Set cwd to the target project path and set CODEX_HARNESS_WORKSPACE_ROOT / CODEX_MCP_CWD guidance if needed.
+4. Add project rule files such as AGENTS.md, README.md, docs/*.md, or equivalent files that actually exist.
+5. Add minimal verification commands for docs, smoke tests, unit tests, or project-specific checks.
+6. If project-specific specialist agents are useful, use codex_harness/agents.example.py as the template, create a local ignored codex_harness/agents.py, and customize the builders before wiring them in.
+7. Run python3 smoke_test.py from the runner.
+8. Run a plan-mode check with python3 main.py --profile <project-name> --mode plan --save-run-log "<task>".
+9. Report the files changed, commands run, verification status, and any remaining manual setup.
+
+Do not commit .env, real profiles/*.toml, run logs, local credentials, API keys, tokens, or private project notes.
+```
+
+For most projects, start with `plan` or `review` mode first. Use `implement` or `full` only after the profile boundaries and verification commands are clear.
+
 ## Run the Harness team
 
 ```bash

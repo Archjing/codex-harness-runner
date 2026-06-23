@@ -104,6 +104,35 @@ profile 用来定义：
 
 这些本地 profile 默认不提交到 Git。
 
+## 在 Codex / Claude Code 等 Agent 工具中使用
+
+你可以让 Codex、Claude Code 或其他代码智能体帮一个项目接入这个 runner。给智能体的信息应该包括 runner 路径、目标项目路径、需要的角色、规则文件、验证命令，以及一个明确边界：密钥只放 `.env`，不要写进 profile 或文档。
+
+推荐指令：
+
+```text
+请使用 Codex Harness Runner 为这个仓库创建一个项目级 harness 多智能体工作流。
+
+Runner 路径：/path/to/codex-harness-runner
+目标项目路径：/path/to/your/project
+Profile 名称：<project-name>
+
+请完成：
+1. 阅读 runner 的 README 和 profiles/example.toml。
+2. 为这个项目创建或更新 runner profiles/<project-name>.toml，不要把密钥写进 profile。
+3. 将 cwd 设置为目标项目路径，并在需要时补充 CODEX_HARNESS_WORKSPACE_ROOT / CODEX_MCP_CWD 的配置说明。
+4. 加入项目真实存在的规则文件，例如 AGENTS.md、README.md、docs/*.md 或等价文件。
+5. 加入最小验证命令，例如文档检查、smoke test、unit test 或项目专用检查。
+6. 如果需要项目专属专家 agent，以 codex_harness/agents.example.py 为模板，创建本地忽略的 codex_harness/agents.py，并在使用前定制 builders。
+7. 在 runner 中运行 python3 smoke_test.py。
+8. 用 python3 main.py --profile <project-name> --mode plan --save-run-log "<task>" 跑一次 plan-mode 检查。
+9. 汇报修改文件、执行命令、验证状态和剩余的人工配置项。
+
+不要提交 .env、真实 profiles/*.toml、run logs、本地凭证、API keys、tokens 或私有项目笔记。
+```
+
+大多数项目应先从 `plan` 或 `review` 模式开始。只有在 profile 边界和验证命令清楚之后，再使用 `implement` 或 `full`。
+
 ## Smoke Test
 
 最小可用性验证：
