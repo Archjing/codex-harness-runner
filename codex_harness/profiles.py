@@ -11,7 +11,7 @@ from .models import AgentModelConfig, parse_agent_models
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 PROFILES_DIR = PROJECT_ROOT / "profiles"
 DEFAULT_PROFILE = "workspace"
-ALLOWED_WORKSPACE_ROOT = Path("/home/zj/workspace").resolve()
+DEFAULT_ALLOWED_WORKSPACE_ROOT = Path.home().resolve()
 
 
 @dataclass(frozen=True)
@@ -86,9 +86,12 @@ def _validate_cwd(cwd: Path) -> None:
         raise RuntimeError(f"Profile cwd does not exist: {cwd}")
     if not cwd.is_dir():
         raise RuntimeError(f"Profile cwd is not a directory: {cwd}")
+    allowed_root = Path(
+        os.getenv("CODEX_HARNESS_WORKSPACE_ROOT", str(DEFAULT_ALLOWED_WORKSPACE_ROOT))
+    ).expanduser().resolve()
     try:
-        cwd.relative_to(ALLOWED_WORKSPACE_ROOT)
+        cwd.relative_to(allowed_root)
     except ValueError as exc:
         raise RuntimeError(
-            f"Profile cwd must stay under {ALLOWED_WORKSPACE_ROOT}: {cwd}"
+            f"Profile cwd must stay under {allowed_root}: {cwd}"
         ) from exc

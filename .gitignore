@@ -8,3 +8,8 @@ __pycache__/
 runs/*.json
 profiles/*.toml
 !profiles/example.toml
+
+# Local project-specific agent extensions. Publish sanitized examples instead.
+agent.py
+codex_harness/agents.py
+codex_harness/agent_runner.py

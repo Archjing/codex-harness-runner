@@ -2,7 +2,9 @@
 
 This project runs Codex CLI as a stdio MCP server process for an OpenAI Agents SDK harness team.
 
-Chinese documentation: [README.zh-CN.md](/home/zj/workspace/codex-harness-runner/README.zh-CN.md)
+Chinese documentation: [README.zh-CN.md](README.zh-CN.md)
+
+Description: Harness engineering runner for project-scoped multi-agent workflows. Uses Codex CLI as a stdio MCP server execution channel.
 
 Terminology used here:
 
@@ -31,7 +33,7 @@ Local runner requirements:
 - A working Codex CLI login/config under the same user that runs the runner.
 - `.env` with `OPENAI_API_KEY` and, for compatible gateways, `OPENAI_BASE_URL` including `/v1`.
 - At least one local `profiles/*.toml` file copied from `profiles/example.toml`.
-- Target project paths must stay under `/home/zj/workspace`; this is currently enforced by profile loading.
+- Target project paths must stay under `CODEX_HARNESS_WORKSPACE_ROOT`; by default this is the current user's home directory.
 
 Containerization status:
 
@@ -43,15 +45,15 @@ Containerization status:
 ## Setup
 
 ```bash
-git clone https://github.com/openai/openai-agents-python.git /home/zj/workspace/openai-agents-python
-cd /home/zj/workspace/openai-agents-python
+git clone https://github.com/openai/openai-agents-python.git ~/workspace/openai-agents-python
+cd ~/workspace/openai-agents-python
 python3 -m pip install --user --break-system-packages -e .
 ```
 
 Then configure the runner:
 
 ```bash
-cd /home/zj/workspace/codex-harness-runner
+cd ~/workspace/codex-harness-runner
 cp .env.example .env
 ```
 
@@ -70,6 +72,7 @@ CODEX_MCP_MODEL=gpt-5.4
 CODEX_MCP_SANDBOX=workspace-write
 CODEX_MCP_APPROVAL_POLICY=never
 CODEX_MCP_TIMEOUT_SECONDS=360000
+CODEX_HARNESS_WORKSPACE_ROOT=/path/to/your/workspace
 ```
 
 Project/workspace defaults live in local `profiles/*.toml` files. These files are ignored by Git because they can contain local paths and provider choices. Start from `profiles/example.toml`.
@@ -79,7 +82,7 @@ Project/workspace defaults live in local `profiles/*.toml` files. These files ar
 This verifies that Codex CLI starts as a stdio MCP server process and exposes the expected tools. It does not run a full model workflow.
 
 ```bash
-cd /home/zj/workspace/codex-harness-runner
+cd ~/workspace/codex-harness-runner
 python3 smoke_test.py
 ```
 
@@ -101,10 +104,10 @@ cp profiles/example.toml profiles/workspace.toml
 
 Common local profile names:
 
-- `workspace`: `/home/zj/workspace`
-- `brainstorm`: `/home/zj/workspace/brainstorm`
-- `stok-mapping`: `/home/zj/workspace/stok-mapping`
-- `my_first_podcast`: `/home/zj/workspace/my_first_podcast`
+- `workspace`
+- `app`
+- `docs`
+- `research`
 
 Each profile defines cwd, model, sandbox, approval policy, rule files, verification commands, and memory targets.
 Profiles can also route specific roles to a different OpenAI-compatible provider without storing secrets:
@@ -143,7 +146,7 @@ extra_body = { thinking = { type = "enabled" } }
 ## Run the Harness team
 
 ```bash
-cd /home/zj/workspace/codex-harness-runner
+cd ~/workspace/codex-harness-runner
 python3 main.py --profile workspace --mode plan --save-run-log \
   "只读总结当前 profile 的规则文件和验证命令，不要改文件。"
 ```
@@ -178,7 +181,7 @@ async with MCPServerStdio(
     params={
         "command": "codex",
         "args": ["mcp-server"],
-        "cwd": "/home/zj/workspace",
+        "cwd": "/path/to/your/workspace",
     },
     client_session_timeout_seconds=360000,
 ) as codex_mcp:

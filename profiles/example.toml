@@ -1,7 +1,7 @@
 # Copy this file to profiles/<project>.toml and fill in project-specific values.
 
 name = ""
-cwd = ""
+cwd = "/path/to/your/project"
 model = ""
 sandbox = ""
 approval_policy = ""
@@ -10,6 +10,7 @@ approval_policy = ""
 rules = []
 
 # Optional: constrain where the runner is allowed to operate.
+# The runner also checks CODEX_HARNESS_WORKSPACE_ROOT.
 allowed_paths = []
 
 # Optional: commands the verifier can run or recommend for this project.

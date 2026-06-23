@@ -2,7 +2,11 @@
 
 这是一个基于 OpenAI Agents SDK 的本地 runner。它会把 Codex CLI 作为一个 stdio MCP server 进程启动，然后让多角色 agent 通过该 MCP server 暴露的 `codex` 与 `codex-reply` tools，对真实项目目录执行只读检查、规划、实现和验证。
 
-对应英文说明见 [README.md](/home/zj/workspace/codex-harness-runner/README.md)。
+对应英文说明见 [README.md](README.md)。
+
+Description: Harness engineering runner for project-scoped multi-agent workflows. Uses Codex CLI as a stdio MCP server execution channel.
+
+中文描述：面向项目级多智能体工作流的 Harness Engineering runner，使用 Codex CLI stdio MCP server 作为代码仓库执行通道。
 
 ## 术语
 
@@ -28,7 +32,7 @@
 - 如果走兼容网关，还需要 `OPENAI_BASE_URL`，并且要包含 `/v1`
 - 至少创建一个本地 `profiles/*.toml`，从 `profiles/example.toml` 复制
 
-当前 profile 的 `cwd` 必须位于 `/home/zj/workspace` 之下，这是当前实现中的硬约束。
+当前 profile 的 `cwd` 必须位于 `CODEX_HARNESS_WORKSPACE_ROOT` 之下；默认值是当前用户的 home 目录。
 
 ## 容器化状态
 
@@ -47,15 +51,15 @@
 先安装 OpenAI Agents SDK：
 
 ```bash
-git clone https://github.com/openai/openai-agents-python.git /home/zj/workspace/openai-agents-python
-cd /home/zj/workspace/openai-agents-python
+git clone https://github.com/openai/openai-agents-python.git ~/workspace/openai-agents-python
+cd ~/workspace/openai-agents-python
 python3 -m pip install --user --break-system-packages -e .
 ```
 
 然后准备本仓库环境变量：
 
 ```bash
-cd /home/zj/workspace/codex-harness-runner
+cd ~/workspace/codex-harness-runner
 cp .env.example .env
 ```
 
@@ -68,6 +72,7 @@ CODEX_MCP_MODEL=gpt-5.4
 CODEX_MCP_SANDBOX=workspace-write
 CODEX_MCP_APPROVAL_POLICY=never
 CODEX_MCP_TIMEOUT_SECONDS=360000
+CODEX_HARNESS_WORKSPACE_ROOT=/path/to/your/workspace
 ```
 
 这些 `CODEX_MCP_*` 变量不是启动一个全局 MCP server 的系统配置，而是这个 runner 在调用 `codex` tool 时传入的默认参数。
@@ -83,9 +88,9 @@ cp profiles/example.toml profiles/workspace.toml
 常见 profile 名称：
 
 - `workspace`
-- `brainstorm`
-- `stok-mapping`
-- `my_first_podcast`
+- `app`
+- `docs`
+- `research`
 
 profile 用来定义：
 
@@ -106,7 +111,7 @@ profile 用来定义：
 最小可用性验证：
 
 ```bash
-cd /home/zj/workspace/codex-harness-runner
+cd ~/workspace/codex-harness-runner
 python3 smoke_test.py
 ```
 
@@ -130,7 +135,7 @@ tools=codex,codex-reply
 例子：
 
 ```bash
-cd /home/zj/workspace/codex-harness-runner
+cd ~/workspace/codex-harness-runner
 python3 main.py --profile workspace --mode plan --save-run-log \
   "只读总结当前 profile 的规则文件和验证命令，不要改文件。"
 ```
