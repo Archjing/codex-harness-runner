@@ -1,6 +1,6 @@
 ---
 name: codex-harness-runner
-description: Use when the user wants to create, configure, or run a Codex Harness Runner project-scoped multi-agent workflow, set up harness profiles, invoke bundled MCP tools, or wire Codex/Claude Code style agents into a repository workflow.
+description: Use when the user wants to create, configure, or run a Codex Harness Runner project-scoped multi-agent workflow, set up harness profiles, invoke bundled MCP tools, or wire a repository workflow.
 ---
 
 # Codex Harness Runner
@@ -19,6 +19,8 @@ Use this skill to help a user create and run project-scoped harness engineering 
 - Do not commit `.env`, real `profiles/*.toml`, `runs/*.json`, local credentials, API keys, tokens, cookies, or private project notes.
 - Keep target project paths under `CODEX_HARNESS_WORKSPACE_ROOT`.
 - Prefer `plan` or `review` mode before `implement` or `full` mode.
+- Do not run multiple harness/Codex CLI write tasks against the same `profile.cwd` at the same time.
+- Use separate Git worktrees and separate profiles when parallel work is required.
 - Report whether verification passed, failed, or was not run.
 
 ## Standard workflow
@@ -44,7 +46,7 @@ uv sync
 
 ## Local setup prompt
 
-When the user needs help configuring this plugin for a local project, offer this prompt for Codex, Claude Code, or another coding agent:
+When the user needs help configuring this plugin for a local project, offer this prompt:
 
 ```text
 Use Codex Harness Runner to configure a local harness workflow for this project.
@@ -54,7 +56,7 @@ Target project path: <path-to-target-project>
 Profile name: <project-name>
 
 Please do the following:
-1. Read the runner README, docs/快速上手.md or docs/Use-With-Agent-Tools.md, and profiles/example.toml.
+1. Read the runner README, 快速上手.md or Quick_Start.md, and profiles/example.toml.
 2. Verify `uv` is available on PATH and run `uv sync` from the runner repository.
 3. If `.env` does not exist, create it from `.env.example`; do not fill in or print secret values.
 4. Tell me exactly which environment variables I need to fill in, including `OPENAI_API_KEY`, optional `OPENAI_BASE_URL`, `CODEX_HARNESS_WORKSPACE_ROOT`, and Codex MCP defaults.

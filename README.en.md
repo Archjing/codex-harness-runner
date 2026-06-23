@@ -1,10 +1,14 @@
-[![中文](https://img.shields.io/badge/README-%E4%B8%AD%E6%96%87-red)](README.md) [![Quick Start](https://img.shields.io/badge/Quick%20Start-English-green)](docs/Use-With-Agent-Tools.md)
+[![中文](https://img.shields.io/badge/README-%E4%B8%AD%E6%96%87-red)](README.md) [![Quick Start](https://img.shields.io/badge/Quick%20Start-English-green)](Quick_Start.md)
 
 # Codex Harness Runner with Codex CLI MCP Server
 
 This project runs Codex CLI as a stdio MCP server process for an OpenAI Agents SDK harness team.
 
 Description: Harness engineering runner for project-scoped multi-agent workflows. Uses Codex CLI as a stdio MCP server execution channel.
+
+## Quick Start
+
+See [Quick_Start.md](Quick_Start.md).
 
 Terminology used here:
 
@@ -142,9 +146,9 @@ reasoning_effort = "high"
 extra_body = { thinking = { type = "enabled" } }
 ```
 
-## Use With Agent Tools
+## Quick Start
 
-Quick Start: [docs/Use-With-Agent-Tools.md](docs/Use-With-Agent-Tools.md)
+Quick Start: [Quick_Start.md](Quick_Start.md)
 
 ## Plugin Installation
 
@@ -219,3 +223,5 @@ The Codex CLI MCP server exposes two tools:
 - `codex-reply`: continue an existing Codex session with `threadId` and `prompt`.
 
 Do not register this server as a global MCP server for the same Codex Desktop session unless you explicitly want recursive Codex-to-Codex behavior. For multi-agent workflows, start the stdio MCP server from this Agents SDK runner.
+
+Do not run multiple harness/Codex CLI write tasks against the same `profile.cwd` at the same time. If parallel work is required, create a separate Git worktree and a separate profile for each task.

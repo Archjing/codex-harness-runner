@@ -1,4 +1,4 @@
-[![English](https://img.shields.io/badge/README-English-blue)](README.en.md) [![快速上手](https://img.shields.io/badge/%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B-%E4%B8%AD%E6%96%87-green)](docs/快速上手.md)
+[![English](https://img.shields.io/badge/README-English-blue)](README.en.md) [![快速上手](https://img.shields.io/badge/%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B-%E4%B8%AD%E6%96%87-green)](快速上手.md)
 
 # Codex Harness Runner 中文说明
 
@@ -7,6 +7,10 @@
 Description: Harness engineering runner for project-scoped multi-agent workflows. Uses Codex CLI as a stdio MCP server execution channel.
 
 中文描述：面向项目级多智能体工作流的 Harness Engineering runner，使用 Codex CLI stdio MCP server 作为代码仓库执行通道。
+
+## 快速上手
+
+见 [快速上手.md](快速上手.md)。
 
 ## 术语
 
@@ -106,9 +110,9 @@ profile 用来定义：
 
 这些本地 profile 默认不提交到 Git。
 
-## 在 Codex / Claude Code 等 Agent 工具中使用
+## 快速上手
 
-快速上手：[docs/快速上手.md](docs/快速上手.md)
+快速上手：[快速上手.md](快速上手.md)
 
 ## Plugin 安装
 
@@ -184,5 +188,6 @@ python3 main.py --profile workspace --mode plan --save-run-log \
 - 不把这个 runner 启动的 Codex CLI MCP server 再注册成当前 Codex Desktop 会话自己的全局 MCP server
 - 不把 secrets、profiles、workspace 状态打进镜像
 - 不把一次 smoke test 误当成完整工作流验证
+- 不要在同一个 `profile.cwd` 上并行运行多个 harness/Codex CLI 写任务；需要并行时，为每个任务使用独立 Git worktree 和独立 profile
 
 这个仓库更像一个可编排的本地执行入口，而不是一个独立 SaaS 服务。

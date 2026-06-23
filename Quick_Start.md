@@ -1,6 +1,6 @@
-# Use With Agent Tools
+# Quick Start
 
-This quick start explains how to ask Codex, Claude Code, or another coding agent to use Codex Harness Runner to create a project-scoped harness multi-agent workflow.
+This quick start explains how to install Codex Harness Runner and configure a project-scoped harness multi-agent workflow.
 
 ## 1. Install the Plugin and Skill
 
@@ -92,9 +92,9 @@ cp codex_harness/agents.example.py codex_harness/agents.py
 
 Then customize `codex_harness/agents.py` locally. Do not commit it unless you have removed private project details.
 
-## 5. Instruction to Give Codex or Claude Code
+## 5. Local Setup Prompt
 
-Use this prompt in Codex, Claude Code, or another coding agent:
+Use this prompt when asking an assistant to configure a local harness workflow:
 
 ```text
 Use Codex Harness Runner to create a project-scoped harness multi-agent workflow for this repository.
@@ -104,7 +104,7 @@ Target project path: /path/to/your/project
 Profile name: <project-name>
 
 Please do the following:
-1. Read the runner README, docs/Use-With-Agent-Tools.md, and profiles/example.toml.
+1. Read the runner README, Quick_Start.md, and profiles/example.toml.
 2. Create or update runner profiles/<project-name>.toml for this project, keeping secrets out of the profile.
 3. Set cwd to the target project path and set CODEX_HARNESS_WORKSPACE_ROOT / CODEX_MCP_CWD guidance if needed.
 4. Add project rule files such as AGENTS.md, README.md, docs/*.md, or equivalent files that actually exist.
@@ -134,3 +134,5 @@ python3 main.py --profile <project-name> --mode review --save-run-log \
 ```
 
 Use `implement` or `full` only after the profile boundaries and verification commands are clear.
+
+Do not run multiple harness/Codex CLI write tasks against the same `profile.cwd` at the same time. If parallel work is required, create a separate Git worktree and a separate profile for each task.
