@@ -1,0 +1,40 @@
+{
+  "name": "codex-harness-runner",
+  "version": "0.1.0",
+  "description": "Harness engineering runner for project-scoped multi-agent workflows using Codex CLI as an MCP execution channel.",
+  "author": {
+    "name": "Archjing",
+    "url": "https://github.com/Archjing"
+  },
+  "homepage": "https://github.com/Archjing/codex-harness-runner",
+  "repository": "https://github.com/Archjing/codex-harness-runner",
+  "license": "MIT",
+  "keywords": [
+    "codex",
+    "harness-engineering",
+    "multi-agent",
+    "mcp",
+    "agents-sdk"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Codex Harness Runner",
+    "shortDescription": "Project-scoped harness multi-agent workflows",
+    "longDescription": "Codex Harness Runner packages reusable instructions and MCP tools for creating and running project-scoped harness engineering teams with OpenAI Agents SDK and Codex CLI.",
+    "developerName": "Archjing",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/Archjing/codex-harness-runner",
+    "defaultPrompt": [
+      "Create a harness workflow profile for this project.",
+      "Run the harness team in plan mode.",
+      "Review this project with Codex Harness Runner."
+    ],
+    "brandColor": "#1F6FEB"
+  }
+}

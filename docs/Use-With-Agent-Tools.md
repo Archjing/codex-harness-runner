@@ -7,9 +7,11 @@ This quick start explains how to ask Codex, Claude Code, or another coding agent
 From the Codex Harness Runner repository:
 
 ```bash
-python3 -m pip install --user -r requirements.txt
+uv sync
 cp .env.example .env
 ```
+
+Ensure `uv` is available on `PATH` in the environment that starts Codex Desktop/CLI. The bundled MCP server uses `uv run python -m codex_harness.plugin_mcp`.
 
 Edit `.env` with your model endpoint:
 
@@ -94,7 +96,7 @@ Please do the following:
 4. Add project rule files such as AGENTS.md, README.md, docs/*.md, or equivalent files that actually exist.
 5. Add minimal verification commands for docs, smoke tests, unit tests, or project-specific checks.
 6. If project-specific specialist agents are useful, use codex_harness/agents.example.py as the template, create a local ignored codex_harness/agents.py, and customize the builders before wiring them in.
-7. Run python3 smoke_test.py from the runner.
+7. Run uv sync and python3 smoke_test.py from the runner.
 8. Run a plan-mode check with python3 main.py --profile <project-name> --mode plan --save-run-log "<task>".
 9. Report the files changed, commands run, verification status, and any remaining manual setup.
 

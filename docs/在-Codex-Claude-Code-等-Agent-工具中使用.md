@@ -7,9 +7,11 @@
 在 Codex Harness Runner 仓库目录下执行：
 
 ```bash
-python3 -m pip install --user -r requirements.txt
+uv sync
 cp .env.example .env
 ```
+
+确保 `uv` 在 Codex Desktop/CLI 启动环境的 `PATH` 中。bundled MCP server 使用 `uv run python -m codex_harness.plugin_mcp` 启动。
 
 编辑 `.env`，填入模型端点：
 
@@ -94,7 +96,7 @@ Profile 名称：<project-name>
 4. 加入项目真实存在的规则文件，例如 AGENTS.md、README.md、docs/*.md 或等价文件。
 5. 加入最小验证命令，例如文档检查、smoke test、unit test 或项目专用检查。
 6. 如果需要项目专属专家 agent，以 codex_harness/agents.example.py 为模板，创建本地忽略的 codex_harness/agents.py，并在使用前定制 builders。
-7. 在 runner 中运行 python3 smoke_test.py。
+7. 在 runner 中运行 uv sync 和 python3 smoke_test.py。
 8. 用 python3 main.py --profile <project-name> --mode plan --save-run-log "<task>" 跑一次 plan-mode 检查。
 9. 汇报修改文件、执行命令、验证状态和剩余的人工配置项。
 

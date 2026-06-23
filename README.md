@@ -25,7 +25,7 @@ Description: Harness engineering runner for project-scoped multi-agent workflows
 ## 运行要求
 
 - Python 3.12+
-- `requirements.txt` 中的 Python 依赖
+- `uv` 可用，并且在 Codex Desktop/CLI 启动环境的 `PATH` 中
 - `PATH` 中可用的 Codex CLI
 - 当前运行用户下已有可用的 Codex CLI 登录/配置
 - `.env` 中至少有 `OPENAI_API_KEY`
@@ -48,11 +48,13 @@ Description: Harness engineering runner for project-scoped multi-agent workflows
 
 ## 初始化
 
-先安装 OpenAI Agents SDK：
+先用 `uv` 同步项目依赖：
 
 ```bash
-python3 -m pip install --user -r requirements.txt
+uv sync
 ```
+
+`uv` 必须在 Codex Desktop/CLI 启动环境的 `PATH` 中，因为 bundled MCP server 使用 `uv run python -m codex_harness.plugin_mcp` 启动。
 
 然后准备本仓库环境变量：
 
@@ -107,6 +109,40 @@ profile 用来定义：
 ## 在 Codex / Claude Code 等 Agent 工具中使用
 
 Quick Start：[docs/在-Codex-Claude-Code-等-Agent-工具中使用.md](docs/在-Codex-Claude-Code-等-Agent-工具中使用.md)
+
+## Plugin 安装
+
+这个仓库本身也是一个 Codex plugin，包含：
+
+- `codex-harness-runner` skill
+- bundled stdio MCP server
+- `list_profiles`
+- `run_harness_plan`
+- `run_harness_review`
+- `run_harness_implement`
+- `run_harness_full`
+
+先进入本仓库目录，并确认 `uv` 在 Codex Desktop/CLI 启动环境的 `PATH` 中：
+
+```bash
+cd <path-to-codex-harness-runner>
+export PATH="$HOME/.local/bin:$PATH"
+```
+
+然后用 `uv` 同步依赖，不要提交或打包 `.venv`：
+
+```bash
+uv sync
+```
+
+然后把当前仓库作为 repo marketplace 加到 Codex：
+
+```bash
+codex plugin marketplace add <path-to-codex-harness-runner>
+codex plugin add codex-harness-runner@codex-harness-runner
+```
+
+安装后需要新开 Codex thread 或重启 Codex Desktop/CLI，新的 skill 和 MCP tools 才会被加载。
 
 ## Smoke Test
 

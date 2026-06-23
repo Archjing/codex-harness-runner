@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "codex-harness-runner": {
+      "command": "uv",
+      "args": ["run", "python", "-m", "codex_harness.plugin_mcp"],
+      "cwd": ".",
+      "tool_timeout_sec": 900
+    }
+  }
+}

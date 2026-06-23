@@ -28,7 +28,7 @@ Terminology used here:
 Local runner requirements:
 
 - Python 3.12 or newer.
-- OpenAI Agents SDK and Python dependencies from `requirements.txt`.
+- `uv` available on `PATH` in the environment that starts Codex Desktop/CLI.
 - Codex CLI available on `PATH`; verify with `codex --version`.
 - A working Codex CLI login/config under the same user that runs the runner.
 - `.env` with `OPENAI_API_KEY` and, for compatible gateways, `OPENAI_BASE_URL` including `/v1`.
@@ -45,8 +45,10 @@ Containerization status:
 ## Setup
 
 ```bash
-python3 -m pip install --user -r requirements.txt
+uv sync
 ```
+
+`uv` must be available on `PATH` in the environment that starts Codex Desktop/CLI because the bundled MCP server starts with `uv run python -m codex_harness.plugin_mcp`.
 
 Then configure the runner:
 
@@ -143,6 +145,40 @@ extra_body = { thinking = { type = "enabled" } }
 ## Use With Agent Tools
 
 Quick Start: [docs/Use-With-Agent-Tools.md](docs/Use-With-Agent-Tools.md)
+
+## Plugin Installation
+
+This repository is also a Codex plugin. It includes:
+
+- The `codex-harness-runner` skill
+- A bundled stdio MCP server
+- `list_profiles`
+- `run_harness_plan`
+- `run_harness_review`
+- `run_harness_implement`
+- `run_harness_full`
+
+First enter this repository and make sure `uv` is on `PATH` in the environment that starts Codex Desktop/CLI:
+
+```bash
+cd <path-to-codex-harness-runner>
+export PATH="$HOME/.local/bin:$PATH"
+```
+
+Then sync dependencies with `uv`. Do not commit or package `.venv`:
+
+```bash
+uv sync
+```
+
+Then add this repository as a repo marketplace:
+
+```bash
+codex plugin marketplace add <path-to-codex-harness-runner>
+codex plugin add codex-harness-runner@codex-harness-runner
+```
+
+After installation, start a new Codex thread or restart Codex Desktop/CLI so the new skill and MCP tools are loaded.
 
 ## Run the Harness team
 
