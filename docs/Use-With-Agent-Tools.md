@@ -2,7 +2,22 @@
 
 This quick start explains how to ask Codex, Claude Code, or another coding agent to use Codex Harness Runner to create a project-scoped harness multi-agent workflow.
 
-## 1. Prepare the Environment
+## 1. Install the Plugin and Skill
+
+Clone the repository and install the Codex plugin:
+
+```bash
+git clone https://github.com/Archjing/codex-harness-runner.git
+cd codex-harness-runner
+export PATH="$HOME/.local/bin:$PATH"
+uv sync
+codex plugin marketplace add <absolute-path-to-codex-harness-runner>
+codex plugin add codex-harness-runner@codex-harness-runner
+```
+
+After installation, start a new Codex thread or restart Codex Desktop/CLI. The `$codex-harness-runner` skill and bundled MCP tools are loaded only in new sessions.
+
+## 2. Prepare the Environment
 
 From the Codex Harness Runner repository:
 
@@ -35,7 +50,7 @@ python3 smoke_test.py
 
 The smoke test should list `codex,codex-reply`. This only verifies that the Codex CLI MCP server starts and exposes tools; it is not a full workflow test.
 
-## 2. Create a Project Profile
+## 3. Create a Project Profile
 
 Start from the public example:
 
@@ -68,7 +83,7 @@ verify_code = [
 
 Real `profiles/*.toml` files are ignored by Git. Keep secrets in `.env`, not in profiles.
 
-## 3. Optional Project Agents
+## 4. Optional Project Agents
 
 If the project needs custom specialists, use the example beside the local ignored module:
 
@@ -78,7 +93,7 @@ cp codex_harness/agents.example.py codex_harness/agents.py
 
 Then customize `codex_harness/agents.py` locally. Do not commit it unless you have removed private project details.
 
-## 4. Instruction to Give Codex or Claude Code
+## 5. Instruction to Give Codex or Claude Code
 
 Use this prompt in Codex, Claude Code, or another coding agent:
 
@@ -103,7 +118,7 @@ Please do the following:
 Do not commit .env, real profiles/*.toml, run logs, local credentials, API keys, tokens, or private project notes.
 ```
 
-## 5. First Workflow Run
+## 6. First Workflow Run
 
 Start in `plan` mode:
 

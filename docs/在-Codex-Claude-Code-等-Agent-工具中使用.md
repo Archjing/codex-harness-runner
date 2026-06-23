@@ -2,7 +2,22 @@
 
 这份 Quick Start 说明如何让 Codex、Claude Code 或其他代码智能体使用 Codex Harness Runner，为一个项目创建 harness 多智能体工作流。
 
-## 1. 准备环境
+## 1. 安装 Plugin 和 Skill
+
+先 clone 仓库并安装 Codex plugin：
+
+```bash
+git clone https://github.com/Archjing/codex-harness-runner.git
+cd codex-harness-runner
+export PATH="$HOME/.local/bin:$PATH"
+uv sync
+codex plugin marketplace add <absolute-path-to-codex-harness-runner>
+codex plugin add codex-harness-runner@codex-harness-runner
+```
+
+安装后需要新开 Codex thread 或重启 Codex Desktop/CLI。`$codex-harness-runner` skill 和 bundled MCP tools 只会在新会话中加载。
+
+## 2. 准备环境
 
 在 Codex Harness Runner 仓库目录下执行：
 
@@ -35,7 +50,7 @@ python3 smoke_test.py
 
 `smoke_test.py` 应能列出 `codex,codex-reply`。这只验证 Codex CLI MCP server 能启动并暴露 tools，不代表完整多智能体工作流已经通过验证。
 
-## 2. 创建项目 Profile
+## 3. 创建项目 Profile
 
 从公开模板开始：
 
@@ -68,7 +83,7 @@ verify_code = [
 
 真实 `profiles/*.toml` 默认被 Git 忽略。密钥只放 `.env`，不要写进 profile。
 
-## 3. 可选项目专属 Agents
+## 4. 可选项目专属 Agents
 
 如果项目需要专属专家 agent，使用本地忽略模块旁边的示例：
 
@@ -78,7 +93,7 @@ cp codex_harness/agents.example.py codex_harness/agents.py
 
 然后在本地定制 `codex_harness/agents.py`。除非已经移除私有项目细节，否则不要提交这个文件。
 
-## 4. 给 Codex 或 Claude Code 的指令
+## 5. 给 Codex 或 Claude Code 的指令
 
 可以把下面这段交给 Codex、Claude Code 或其他代码智能体：
 
@@ -103,7 +118,7 @@ Profile 名称：<project-name>
 不要提交 .env、真实 profiles/*.toml、run logs、本地凭证、API keys、tokens 或私有项目笔记。
 ```
 
-## 5. 第一次运行
+## 6. 第一次运行
 
 先用 `plan` 模式：
 
