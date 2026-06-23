@@ -51,15 +51,12 @@ Description: Harness engineering runner for project-scoped multi-agent workflows
 先安装 OpenAI Agents SDK：
 
 ```bash
-git clone https://github.com/openai/openai-agents-python.git ~/workspace/openai-agents-python
-cd ~/workspace/openai-agents-python
-python3 -m pip install --user --break-system-packages -e .
+python3 -m pip install --user -r requirements.txt
 ```
 
 然后准备本仓库环境变量：
 
 ```bash
-cd ~/workspace/codex-harness-runner
 cp .env.example .env
 ```
 
@@ -68,6 +65,7 @@ cp .env.example .env
 ```bash
 OPENAI_API_KEY=...
 OPENAI_BASE_URL=https://your-base-url/v1
+CODEX_MCP_CWD=/path/to/your/workspace
 CODEX_MCP_MODEL=gpt-5.4
 CODEX_MCP_SANDBOX=workspace-write
 CODEX_MCP_APPROVAL_POLICY=never
@@ -111,7 +109,6 @@ profile 用来定义：
 最小可用性验证：
 
 ```bash
-cd ~/workspace/codex-harness-runner
 python3 smoke_test.py
 ```
 
@@ -135,7 +132,6 @@ tools=codex,codex-reply
 例子：
 
 ```bash
-cd ~/workspace/codex-harness-runner
 python3 main.py --profile workspace --mode plan --save-run-log \
   "只读总结当前 profile 的规则文件和验证命令，不要改文件。"
 ```

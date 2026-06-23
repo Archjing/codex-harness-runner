@@ -45,15 +45,12 @@ Containerization status:
 ## Setup
 
 ```bash
-git clone https://github.com/openai/openai-agents-python.git ~/workspace/openai-agents-python
-cd ~/workspace/openai-agents-python
-python3 -m pip install --user --break-system-packages -e .
+python3 -m pip install --user -r requirements.txt
 ```
 
 Then configure the runner:
 
 ```bash
-cd ~/workspace/codex-harness-runner
 cp .env.example .env
 ```
 
@@ -68,6 +65,7 @@ OPENAI_BASE_URL=https://your-base-url/v1
 Optional defaults passed to Codex tool calls through the MCP server:
 
 ```bash
+CODEX_MCP_CWD=/path/to/your/workspace
 CODEX_MCP_MODEL=gpt-5.4
 CODEX_MCP_SANDBOX=workspace-write
 CODEX_MCP_APPROVAL_POLICY=never
@@ -82,7 +80,6 @@ Project/workspace defaults live in local `profiles/*.toml` files. These files ar
 This verifies that Codex CLI starts as a stdio MCP server process and exposes the expected tools. It does not run a full model workflow.
 
 ```bash
-cd ~/workspace/codex-harness-runner
 python3 smoke_test.py
 ```
 
@@ -146,7 +143,6 @@ extra_body = { thinking = { type = "enabled" } }
 ## Run the Harness team
 
 ```bash
-cd ~/workspace/codex-harness-runner
 python3 main.py --profile workspace --mode plan --save-run-log \
   "只读总结当前 profile 的规则文件和验证命令，不要改文件。"
 ```
