@@ -1,4 +1,4 @@
-[![English](https://img.shields.io/badge/README-English-blue)](README.en.md) [![Quick Start](https://img.shields.io/badge/Quick%20Start-%E4%B8%AD%E6%96%87-green)](docs/在-Codex-Claude-Code-等-Agent-工具中使用.md)
+[![English](https://img.shields.io/badge/README-English-blue)](README.en.md) [![快速上手](https://img.shields.io/badge/%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B-%E4%B8%AD%E6%96%87-green)](docs/快速上手.md)
 
 # Codex Harness Runner 中文说明
 
@@ -108,7 +108,7 @@ profile 用来定义：
 
 ## 在 Codex / Claude Code 等 Agent 工具中使用
 
-Quick Start：[docs/在-Codex-Claude-Code-等-Agent-工具中使用.md](docs/在-Codex-Claude-Code-等-Agent-工具中使用.md)
+快速上手：[docs/快速上手.md](docs/快速上手.md)
 
 ## Plugin 安装
 
