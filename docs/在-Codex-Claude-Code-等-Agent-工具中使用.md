@@ -1,0 +1,120 @@
+# 在 Codex / Claude Code 等 Agent 工具中使用
+
+这份 Quick Start 说明如何让 Codex、Claude Code 或其他代码智能体使用 Codex Harness Runner，为一个项目创建 harness 多智能体工作流。
+
+## 1. 准备环境
+
+在 Codex Harness Runner 仓库目录下执行：
+
+```bash
+python3 -m pip install --user -r requirements.txt
+cp .env.example .env
+```
+
+编辑 `.env`，填入模型端点：
+
+```bash
+OPENAI_API_KEY=...
+OPENAI_BASE_URL=https://your-base-url/v1
+CODEX_HARNESS_WORKSPACE_ROOT=/path/to/your/workspace
+CODEX_MCP_CWD=/path/to/your/workspace
+CODEX_MCP_MODEL=gpt-5.4
+CODEX_MCP_SANDBOX=workspace-write
+CODEX_MCP_APPROVAL_POLICY=never
+CODEX_MCP_TIMEOUT_SECONDS=360000
+```
+
+检查基础条件：
+
+```bash
+codex --version
+python3 smoke_test.py
+```
+
+`smoke_test.py` 应能列出 `codex,codex-reply`。这只验证 Codex CLI MCP server 能启动并暴露 tools，不代表完整多智能体工作流已经通过验证。
+
+## 2. 创建项目 Profile
+
+从公开模板开始：
+
+```bash
+cp profiles/example.toml profiles/<project-name>.toml
+```
+
+编辑本地 profile：
+
+```toml
+name = "<project-name>"
+cwd = "/path/to/your/project"
+model = "gpt-5.4"
+sandbox = "workspace-write"
+approval_policy = "never"
+
+rules = [
+  "AGENTS.md",
+  "README.md"
+]
+
+verify_doc = [
+  "rg -n \"important topic\" README.md docs"
+]
+
+verify_code = [
+  "python3 -m pytest"
+]
+```
+
+真实 `profiles/*.toml` 默认被 Git 忽略。密钥只放 `.env`，不要写进 profile。
+
+## 3. 可选项目专属 Agents
+
+如果项目需要专属专家 agent，使用本地忽略模块旁边的示例：
+
+```bash
+cp codex_harness/agents.example.py codex_harness/agents.py
+```
+
+然后在本地定制 `codex_harness/agents.py`。除非已经移除私有项目细节，否则不要提交这个文件。
+
+## 4. 给 Codex 或 Claude Code 的指令
+
+可以把下面这段交给 Codex、Claude Code 或其他代码智能体：
+
+```text
+请使用 Codex Harness Runner 为这个仓库创建一个项目级 harness 多智能体工作流。
+
+Runner 路径：/path/to/codex-harness-runner
+目标项目路径：/path/to/your/project
+Profile 名称：<project-name>
+
+请完成：
+1. 阅读 runner 的 README、docs/在-Codex-Claude-Code-等-Agent-工具中使用.md 和 profiles/example.toml。
+2. 为这个项目创建或更新 runner profiles/<project-name>.toml，不要把密钥写进 profile。
+3. 将 cwd 设置为目标项目路径，并在需要时补充 CODEX_HARNESS_WORKSPACE_ROOT / CODEX_MCP_CWD 的配置说明。
+4. 加入项目真实存在的规则文件，例如 AGENTS.md、README.md、docs/*.md 或等价文件。
+5. 加入最小验证命令，例如文档检查、smoke test、unit test 或项目专用检查。
+6. 如果需要项目专属专家 agent，以 codex_harness/agents.example.py 为模板，创建本地忽略的 codex_harness/agents.py，并在使用前定制 builders。
+7. 在 runner 中运行 python3 smoke_test.py。
+8. 用 python3 main.py --profile <project-name> --mode plan --save-run-log "<task>" 跑一次 plan-mode 检查。
+9. 汇报修改文件、执行命令、验证状态和剩余的人工配置项。
+
+不要提交 .env、真实 profiles/*.toml、run logs、本地凭证、API keys、tokens 或私有项目笔记。
+```
+
+## 5. 第一次运行
+
+先用 `plan` 模式：
+
+```bash
+python3 main.py --profile <project-name> --mode plan --save-run-log \
+  "Inspect this project profile and propose a harness workflow. Do not edit files."
+```
+
+再用 `review` 模式做只读检查：
+
+```bash
+python3 main.py --profile <project-name> --mode review --save-run-log \
+  "Review the current project state and identify missing verification coverage. Do not edit files."
+```
+
+只有在 profile 边界和验证命令清楚之后，再使用 `implement` 或 `full`。
