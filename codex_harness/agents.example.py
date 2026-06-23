@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+# Rename this file to agents.py and customize the builders before enabling project-specific agents.
+
 from agents import Agent
 from agents.mcp import MCPServerStdio
 
